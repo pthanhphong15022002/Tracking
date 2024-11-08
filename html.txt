@@ -1,0 +1,112 @@
+<div class="d-flex gap-1 container-border full mt-2">
+  <div class="w-1/3 bg-white">
+    <div class="filter-field bg-white overflow-y-auto" style="max-width: 350px">
+      <div class="filter-inner h-custom">
+        <div class="formgroup-field">
+          <span class="formgroup-tittle">Chọn điều kiện xem</span>
+        </div>
+        <div class="formgroup-field">
+          <div class="formgroup-date">
+            <div class="formgroup">
+              <codx-label class="small-title" default="Từ ngày"></codx-label>
+              <codx-input field="FromDate" type="datetime" placeholder="Chọn ngày"
+                (valueChange)="valueChange1($event)"></codx-input>
+            </div>
+            <div class="formgroup">
+              <codx-label class="small-title" default="Đến ngày"></codx-label>
+              <codx-input field="ToDate" type="datetime" placeholder="Chọn ngày"
+                (valueChange)="valueChange1($event)"></codx-input>
+            </div>
+          </div>
+        </div>
+        <div class="formgroup-field">
+          <span class="formgroup-tittle">Chọn thông tin theo dõi</span>
+          <div class="formgroup-body">
+            <div class="formgroup row-custom">
+              <div class="w-full">
+                <codx-searchbar (searchEvent)="searchValue($event)"></codx-searchbar>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="formgroup-field">
+          <div class="formgroup-body">
+            <ng-container *ngIf="group">
+              <div class="formgroup radio-custom">
+                <codx-input type="checkbox" field="CheckAll" [checked]="isCheckAll"
+                  (valueChange)="valueChange1($event)"></codx-input>
+                <span class="fs-6 fw-bold"> Chọn tất cả thông tin </span>
+              </div>
+              <!-- <ng-container *ngFor="let item of resouscesSearch">
+                <div class="formgroup radio-custom">
+                  <codx-input [field]="item.fieldName" type="checkbox" [checked]="isCheck"
+                    (valueChange)="valueChange($event,item)"></codx-input>
+                  <span> {{ item.caption }} </span>
+                </div>
+              </ng-container> -->
+              <div>
+                <ng-container *ngFor="let item of filteredGroup">
+                  <div class="radio-custom mb-2">
+                    <div class="d-flex">
+                      <codx-input [field]="item.groupCode" type="checkbox" [checked]="isCheck"
+                        (valueChange)="valueChange($event, item)">
+                      </codx-input>
+                      <i [ngClass]="expandedGroups[item.groupCode] ? 'icon-arrow_drop_down' : 'icon-arrow_right'"></i>
+                      <span class="fw-bold" style="cursor:pointer" (click)="expand(item.groupCode)"> {{ item.groupName
+                        }} </span>
+                    </div>
+
+                    <!-- Nếu nhóm được mở rộng, hiển thị lstChild của nhóm đó -->
+                    <ng-container *ngIf="expandedGroups[item.groupCode]">
+                      <div class="child-container mb-2" [ngClass]="{ 'expanded': expandedGroups[item.groupCode] }">
+                        <ng-container *ngFor="let child of filteredLstChild[item.groupCode]">
+                          <div class="mt-2 mx-5">
+                            <codx-input [field]="child.fieldName" type="checkbox" [checked]="isCheck"
+                              (valueChange)="valueChange($event, child)">
+                            </codx-input>
+                            <span> {{ child.caption }} </span>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+
+
+
+
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-5 position-sticky" style="bottom: 0; text-align: right;">
+      <button type="button" class="btn btn-primary" (click)="readData()">
+        <span>Đọc số liệu</span>
+      </button>
+    </div>
+
+  </div>
+  <div class="full container bg-body w-fit">
+    <!-- -----------------------------------Theo dõi thay đổi----------------------------------------------- -->
+    <div class="row mt-2">
+      <div class="title d-flex align-items-center justify-content-start py-4">
+        <div class="align-items-center d-flex text-left text-primary">
+          <span class="icon-published_with_changes icon-20 me-2"></span>
+          <codx-label name="lblTracking" [formName]="'Tracking'" [default]="'THEO DÕI THAY ĐỔI'"
+            class="fs-5-sm fw-bold text-primary text-uppercase">
+          </codx-label>
+        </div>
+      </div>
+    </div>
+    <div style="height: calc(100vh - 280px)">
+      <codx-gridview-v2 #eTrackChangesGridViewID [entityName]="'HR_EmpTracking'" [autoFitColumns]="false"
+        [service]="'HR'" [formName]="'EmpTracking'" [gridViewName]="'grvEmpTracking'" [hideMoreFunc]="true"
+        [autoLoad]="true" [gridLines]="'None'" [assemblyName]="'HR'" [className]="'SysTrackingValueBusiness'"
+        [method]="'LoadDataForFilter'" (onSelected)="onClickItem($event)">
+      </codx-gridview-v2>
+    </div>
+  </div>
+</div>
