@@ -1,0 +1,2 @@
+Không mở rộng => Không chọn được tất cả
+Check vào cha => Con k check theo
